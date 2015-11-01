@@ -1,0 +1,112 @@
+create database tripmn;
+use tripmn;
+
+CREATE TABLE User (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  userName varchar(255),
+  userType int,
+  status int,
+  firstName varchar(255),
+  lastName varchar(255),
+  emailId varchar(255),
+  mobileNumber varchar(255),
+  password varchar(255),
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+CREATE TABLE Account (
+  id bigint primary key AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  user_id bigint,
+  accountType int,
+  status int,
+  availableBalance bigint,
+  blockedBalance bigint,
+  cumulativeCredit bigint,
+  cumulativeDebit bigint,
+  password varchar(255),
+  foreign key(user_id) references User(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE Transaction (
+  id bigint primary key AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  account_id bigint,
+  accountType int,
+  status int,
+  availableBalance bigint,
+  blockedBalance bigint,
+  foreign key(account_id) references Account(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE Token (
+  id bigint primary key AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  tokenQuantity bigint,
+  amount bigint,
+  expirtyDate datetime,
+  status int default 0
+) ENGINE=InnoDB;
+
+insert into Token(creationTime, creatorId, modifiedTime, modifierId, version, tokenQuantity, amount, expirtyDate, status)
+values(now(), 1, now(), 1, 1, 10, 1000, '2016-01-01', 0),
+       (now(), 1, now(), 1, 1, 100, 10000, '2016-01-01', 0);
+
+CREATE TABLE ItemCategory (
+  id bigint primary key AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  name varchar(255),
+  description varchar(255),
+  isActive bit(1) default true
+) ENGINE=InnoDB;
+
+
+insert into ItemCategory(creationTime, creatorId, modifiedTime, modifierId, version, name, description)
+values(now(), 1, now(), 1, 1, "Electronics", "Electronic Goods");
+
+CREATE TABLE Item (
+  id bigint primary key AUTO_INCREMENT,
+  creationTime datetime,
+  creatorId varchar(255),
+  modifiedTime datetime,
+  modifierId varchar(255),
+  version int(11),
+  name varchar(255),
+  description varchar(255),
+  brand varchar(255),
+  price bigint,
+  endDate datetime,
+  image blob,
+  imagePath varchar(255),
+  termsAndConditions varchar(1000),
+  isActive bit(1) default true,
+  itemCategory_id bigint,
+  foreign key (itemCategory_id) references ItemCategory(id)
+) ENGINE=InnoDB;
+
+insert into Item(creationTime, creatorId, modifiedTime, modifierId, version, name, description, brand, price, endDate, image, imagePath, termsAndConditions, isActive, itemCategory_id)
+values(now(), 1, now(), 1, 1, "Laptop", "Laptop", 'HP', 3500000, '2016-01-01', '', '', '', true, 1),
+       (now(), 1, now(), 1, 1, "Laptop", "Laptop", 'DELL', 3500000, '2016-01-01', '', '', '', true, 1),
+       (now(), 1, now(), 1, 1, "Camera", "Camera", 'Cannon', 3500000, '2016-01-01', '', '', '', true, 1),
+       (now(), 1, now(), 1, 1, "Laptop", "Laptop", 'HP', 3500000, '2016-01-01', '', '', '', true, 1);
